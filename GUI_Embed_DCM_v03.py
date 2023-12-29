@@ -64,7 +64,7 @@ def add_peak1(prefix, center, amplitude=0.002, sigma=0.0075):
 root = Tk()
 root.title("DCM Image Analysis")
 root.iconbitmap(r'Icons\analyst.ico')
-root.geometry("900x600")
+root.geometry("1200x600")
 
 pygame.mixer.init()
 
@@ -110,8 +110,7 @@ def Dir_Open_03():
     e_03.insert(0, file_directory)    
 
 def Sample_plot(): 
-    fig = Figure(figsize = (4, 4), 
-                 dpi = 100) 
+    fig = Figure(figsize = (4, 4), dpi = 100) 
 
     y = [i**2 for i in range(101)] 
 
@@ -132,6 +131,79 @@ def Sample_plot():
     # placing the toolbar on the Tkinter window 
     canvas.get_tk_widget().pack()
 
+def Sample_plot_02():
+    global frame_Result_02
+    frame_Result_02.destroy()
+    frame_Result_02 = LabelFrame(root, text="Preiview Result")
+    frame_Result_02.grid(row=2,column=2,rowspan=len(Option_Set)-1)
+    
+    fig = Figure(figsize = (4, 4), 
+                 dpi = 100) 
+
+    y = [i**2 for i in range(101)] 
+
+    plot1 = fig.add_subplot(111) 
+  
+    plot1.plot(y) 
+        
+    canvas = FigureCanvasTkAgg(fig, frame_Result_02)   
+    canvas.draw() 
+  
+    # placing the canvas on the Tkinter window 
+    canvas.get_tk_widget().pack()
+  
+    # creating the Matplotlib toolbar 
+    toolbar = NavigationToolbar2Tk(canvas, frame_Result_02) 
+    toolbar.update() 
+  
+    # placing the toolbar on the Tkinter window 
+    canvas.get_tk_widget().pack()
+
+def Sample_plot_03():
+    global frame_Result_02
+    global e_17, e_18, e_01
+    
+    frame_Result_02.destroy()
+    frame_Result_02 = LabelFrame(root, text="Preiview Result")
+    frame_Result_02.grid(row=2,column=2,rowspan=len(Option_Set)-1)
+    
+
+    FileDir = e_01.get()
+    FileDir = FileDir.replace(os.sep,"/")
+    FileDir = FileDir + "/"
+    FileDir = FileDir.replace('\\','/')
+    
+    FileIndex = round( int(e_17.get())/2 + int(e_18.get())/2)
+        
+    FileIndex2 = ("%04d" %(FileIndex))
+
+    SelectData = "*_"+FileIndex2+"*"
+
+    OtherwayData = find(SelectData, FileDir)
+
+    dcm_img = pydicom.dcmread(OtherwayData[0], force=True)
+    img_array = dcm_img.pixel_array
+
+    fig, ax = plt.subplots(figsize = (5.5, 5.5))
+    im = plt.imshow(img_array)
+    fig.colorbar(im, fraction=0.045)
+    plt.clim(3000,6000)
+    plt.show()
+        
+    canvas = FigureCanvasTkAgg(fig, frame_Result_02)   
+    canvas.draw() 
+  
+    # placing the canvas on the Tkinter window 
+    canvas.get_tk_widget().pack()
+  
+    # creating the Matplotlib toolbar 
+    toolbar = NavigationToolbar2Tk(canvas, frame_Result_02) 
+    toolbar.update() 
+  
+    # placing the toolbar on the Tkinter window 
+    canvas.get_tk_widget().pack()
+
+
 ###################################################################
 ###################################################################
 ###################################################################
@@ -148,9 +220,12 @@ def Clicked_Analyze():
     top = Toplevel()
     top.title("Analysis data")
     top.iconbitmap(r'Icons\ruby.ico')
-
+    
+    top_pos_x = 0
+    
     Button(top,text="Close\nWindow",pady=20,bg="yellow", command=top.destroy
-           ).pack(side='left',padx=5)
+           ).grid(row = 0, column = top_pos_x)
+    top_pos_x = top_pos_x+1
     
     FileDir = e_01.get()
     FileDir = FileDir.replace(os.sep,"/")
@@ -262,12 +337,13 @@ def Clicked_Analyze():
 
             canvas = FigureCanvasTkAgg(fig, top)    
             canvas.draw()
-            canvas.get_tk_widget().pack(side='right')
-            toolbar = NavigationToolbar2Tk(canvas, top)
-            toolbar.pack(side='right')
+            canvas.get_tk_widget().grid(row=0,column=top_pos_x)
+            
+            toolbarFrame = LabelFrame(top, text = 'toolbar')
+            toolbarFrame.grid(row=1,column=top_pos_x)
+            toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
             toolbar.update()
-
-
+            top_pos_x = top_pos_x + 1
         ##################################################################  
         
         img_array_bw = ski.util.img_as_float(img_array_selection)
@@ -282,8 +358,8 @@ def Clicked_Analyze():
             
             canvas = FigureCanvasTkAgg(fig, top)    
             canvas.draw()
-            canvas.get_tk_widget().pack()
-
+            canvas.get_tk_widget().grid(row=0,column=top_pos_x)
+            top_pos_x = top_pos_x + 1
 
             if ImgFigSave == 'On':
                 e = datetime.datetime.now()
@@ -383,11 +459,14 @@ def Clicked_Analyze():
     
     canvas = FigureCanvasTkAgg(fig, top)    
     canvas.draw()
-    canvas.get_tk_widget().pack()
-    toolbar = NavigationToolbar2Tk(canvas, top)
+    canvas.get_tk_widget().grid(row=0,column=top_pos_x)
+    
+    toolbarFrame = LabelFrame(top, text = 'toolbar')
+    toolbarFrame.grid(row=1,column=top_pos_x)
+    toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
     toolbar.update()
-    canvas.get_tk_widget().pack()
-
+    top_pos_x = top_pos_x + 1
+            
 ###################################################################
 ###################################################################
 ###################################################################
@@ -471,7 +550,7 @@ n = n + 1
 #####################################################################
 
 frame_11 = LabelFrame(root, text="File Directory Setting", padx= 30, pady=5)
-frame_11.grid(row=4, rowspan= 3, column=1,padx=20,pady=5)
+frame_11.grid(row=3, rowspan= 3, column=1,padx=20,pady=5)
 
 myButton = Button(frame_11, text="Data Directory", 
                   bg = "green", fg = "black", 
@@ -545,7 +624,7 @@ e_12.insert(0,"3240")
 Label(frame_12, text = "Area of Interest (FOV)"
       ).grid(row=3,column=0,columnspan=3, pady=(10,0))
 
-Label(frame_12, text = "Horizontal From/To(pixel) = "
+Label(frame_12, text = "Vertical From/To(pixel) = "
       ).grid(row=4,column=0)
 e_13 = Entry(frame_12, width = 6, borderwidth = 3,
              bg = "light blue"
@@ -558,7 +637,7 @@ e_14 = Entry(frame_12, width = 6, borderwidth = 3,
 e_14.grid(row=4,column=2)
 e_14.insert(0,"400")
 
-Label(frame_12, text = "Vertical From/To(pixel) = "
+Label(frame_12, text = "Horizontal From/To(pixel) = "
       ).grid(row=5,column=0)
 e_15 = Entry(frame_12, width = 6, borderwidth = 3,
              bg = "light blue" 
@@ -602,29 +681,57 @@ e_19.insert(0,"15")
 
 
 
-frame_Result_01 = LabelFrame(root, text="Analyze")
-frame_Result_01.grid(row=0,column=2,rowspan=len(Option_Set), padx=20,pady=20)
+frame_Result_01 = LabelFrame(root, text="Analysis")
+frame_Result_01.grid(row=0,column=2,rowspan=2, padx=20,pady=20)
 
 
-my_button = Button(frame_Result_01, text="Play", font = ("Times new roman",12),
+my_button = Button(frame_Result_01, text="Preview", font = ("Times new roman",12),
        padx = 20, pady = 5,
-       command=Sample_plot
-                   ).pack()
+       command=Sample_plot_03
+                   ).grid(row=0,column=0)
 
 my_button = Button(frame_Result_01, text="Analyze", font = ("Times new roman",12),
        padx = 20, pady = 5,
        command=Clicked_Analyze
-                   ).pack()
+                   ).grid(row=0,column=2)
+
+my_button = Button(frame_Result_01, text="Test", font = ("Times new roman",12),
+       padx = 20, pady = 5,
+       command=Sample_plot_02
+                   ).grid(row=0,column=3)
 
 #####################################################################
 #####################################################################
+
+frame_Result_02 = LabelFrame(root, text="Preiview result")
+frame_Result_02.grid(row=2,column=2,rowspan=len(Option_Set)-1)
+
+fig = Figure(figsize = (4, 4), dpi = 100) 
+  
+canvas = FigureCanvasTkAgg(fig, frame_Result_02)   
+canvas.draw() 
+  
+# placing the canvas on the Tkinter window 
+canvas.get_tk_widget().pack()
+  
+# creating the Matplotlib toolbar 
+toolbar = NavigationToolbar2Tk(canvas, frame_Result_02) 
+toolbar.update() 
+  
+# placing the toolbar on the Tkinter window 
+canvas.get_tk_widget().pack()
+
+#####################################################################
+#####################################################################
+
+
 
 
 Dialog_Index_Row = 0
 Dialog_Index_Col = 3
 
 
-my_button = Button(root, text="Nice", font = ("Times new roman",12),
+my_button = Button(root, text="Nice", bg = '#ABCD00', font = ("Times new roman",12),
        padx = 20, pady = 5,
        command=soundplay
                    ).grid(
@@ -632,7 +739,12 @@ my_button = Button(root, text="Nice", font = ("Times new roman",12),
                        padx = 10, pady = 5
                        )
 
-
+my_button = Button(root, text="Exit", bg ="yellow", font = ("Times new roman",12),
+       padx = 20, pady = 5, command=root.destroy
+                   ).grid(
+                       row=Dialog_Index_Row+1, column=Dialog_Index_Col+0, 
+                       padx = 10, pady = 5
+                       )
 
 
 

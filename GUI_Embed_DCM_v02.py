@@ -145,6 +145,13 @@ def Clicked_Analyze():
     global FileDir, SelectData, OtherwayData
     global find
     
+    top = Toplevel()
+    top.title("Analysis data")
+    top.iconbitmap(r'Icons\ruby.ico')
+
+    Button(top,text="Close\nWindow",pady=20,bg="yellow", command=top.destroy
+           ).pack(side='left',padx=5)
+    
     FileDir = e_01.get()
     FileDir = FileDir.replace(os.sep,"/")
     FileDir = FileDir + "/"
@@ -260,10 +267,14 @@ def Clicked_Analyze():
         if Image_BW_ResultShow == 'On':
             fig, ax = plt.subplots()
             im = plt.imshow(img_array_bw, cmap ="gray")
-
             fig.colorbar(im)
+            ax.imshow(im)
             plt.clim(0.02,0.09)
-            plt.show()
+            #plot = plt.show()
+            #canvas = FigureCanvasTkAgg(fig, top)    
+            #canvas.draw()
+            #canvas.get_tk_widget().pack(side='right')
+
 
             if ImgFigSave == 'On':
                 e = datetime.datetime.now()
@@ -301,13 +312,16 @@ def Clicked_Analyze():
 
             fig, ax = plt.subplots()
 
-            plt.title("Grayscale Histogram")
+            plt.title("Grayscale Histogram Sections")
             plt.xlabel("grayscale value")
             plt.ylabel("pixel count")
             plt.xlim([xscalerange[0], xscalerange[1]])  # <- named arguments do not work here
         
-            plt.plot(x, y)  # <- or here
-            plt.show()           
+            plot = plt.plot(x, y)  # <- or here
+            
+            canvas = FigureCanvasTkAgg(fig, top)    
+            canvas.draw()
+            canvas.get_tk_widget().pack(side='right')
             
             if ImgFigSave == 'On':
                 e = datetime.datetime.now()
@@ -355,9 +369,15 @@ def Clicked_Analyze():
     x = hist_data[:,0]
     y = hist_data[:,total_hist_num[0]]
         
-    plt.plot(x, y)  # <- or here
-        
-
+    plot_G_Hist = plt.plot(x, y)  # <- or here
+    
+    
+    canvas = FigureCanvasTkAgg(fig, top)    
+    canvas.draw()
+    canvas.get_tk_widget().pack()
+    toolbar = NavigationToolbar2Tk(canvas, top)
+    toolbar.update()
+    canvas.get_tk_widget().pack()
 
 ###################################################################
 ###################################################################
@@ -370,7 +390,7 @@ OnOff_MODES = [
 
 Option_Set = [
     
-    ( "ImageResultShow" ), ( "Image_BW\nResultShow" ), ( "ImgFigSave" ), 
+    ( "ImageResultShow" ), ( "Image_BW\nHistShow" ), ( "ImgFigSave" ), 
     ( "Hist_Fig_Save" ), ( "Hist_Peak_Mark" ),
     ( "pptSave" )
     
@@ -565,7 +585,7 @@ e_19 = Entry(frame_12, width = 4, borderwidth = 3,
              bg = "#CF9FFF"
       )
 e_19.grid(row=7,column=3)
-e_19.insert(0,"10")
+e_19.insert(0,"15")
 
 
 #####################################################################

@@ -162,6 +162,9 @@ def Sample_plot_02():
 def Sample_plot_03():
     global frame_Result_02
     global e_17, e_18, e_01
+    global e_13, e_14, e_15, e_16
+    global e_11, e_12
+    global Option_Var_11
     
     frame_Result_02.destroy()
     frame_Result_02 = LabelFrame(root, text="Preiview Result")
@@ -180,16 +183,55 @@ def Sample_plot_03():
     SelectData = "*_"+FileIndex2+"*"
 
     OtherwayData = find(SelectData, FileDir)
-
+    
+    UpImgBound = int(e_11.get())
+    DownImgBound = int(e_12.get())
+    
     dcm_img = pydicom.dcmread(OtherwayData[0], force=True)
     img_array = dcm_img.pixel_array
+
+    Filt_On = Option_Var_11.get()
+    if Filt_On =='On':
+        np.place(img_array, img_array > UpImgBound, 0)
+        np.place(img_array, img_array < DownImgBound, 0)
+
 
     fig, ax = plt.subplots(figsize = (5.5, 5.5))
     im = plt.imshow(img_array)
     fig.colorbar(im, fraction=0.045)
-    plt.clim(3000,6000)
-    plt.show()
+    
+    if Filt_On =='On':
+        plt.clim(DownImgBound,UpImgBound)
         
+    else:
+        plt.clim(3000,6000)
+            
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    plt.show()
+    
+    ImgFocusH = (int(e_13.get()), int(e_14.get()))
+    ImgFocusW = (int(e_15.get()), int(e_16.get()))
+    
+    Red_Box_x = [
+        int(e_15.get()),int(e_15.get()),int(e_16.get()),int(e_16.get()),int(e_15.get())
+       ]
+    Red_Box_y = [
+        int(e_14.get()),int(e_13.get()),int(e_13.get()),int(e_14.get()),int(e_14.get())
+        ]
+    
+    
+    
+    
+    ax.plot(Red_Box_x,Red_Box_y,'r', linewidth=2)
+    
     canvas = FigureCanvasTkAgg(fig, frame_Result_02)   
     canvas.draw() 
   
@@ -213,6 +255,7 @@ def Clicked_Analyze():
     global e_11, e_12, e_13, e_14, e_15, e_16, e_17, e_18, e_19
     global Option_Var_01, Option_Var_02, Option_Var_03
     global Option_Var_04, Option_Var_05, Option_Var_06
+    global Option_Var_11
     global FileNumStart, FileNumEnd, IntervalFile
     global FileDir, SelectData, OtherwayData
     global find
@@ -279,6 +322,8 @@ def Clicked_Analyze():
     Hist_Peak_Mark = Option_Var_05.get()
     
     pptSave = Option_Var_06.get()
+    
+    Filt_On = Option_Var_11.get()
 
     ##############################################################
     FileNumStart, FileNumEnd, IntervalFile = (int(e_17.get()), int(e_18.get()), int(e_19.get()))

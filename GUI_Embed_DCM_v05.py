@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
 from tkinter import filedialog
 from PIL import ImageTk, Image
 import pygame
@@ -260,14 +261,45 @@ def Clicked_Analyze():
     global FileDir, SelectData, OtherwayData
     global find
     global PeakVariance, setsigma
+      
     
-    top = Toplevel()
-    top.title("Analysis data")
-    top.iconbitmap(r'Icons\ruby.ico')
+    
+    super_top = Toplevel()
+    super_top.title("Analysis data")
+    super_top.iconbitmap(r'Icons\ruby.ico')
+    super_top.geometry("800x500")
+    
+    #Create Main Frame
+    Scroll_main_01 = Frame(super_top)
+    Scroll_main_01.pack(fill=BOTH, expand = 1)
+
+    #Create Canvas
+    Scroll_my_canvas = Canvas(Scroll_main_01)
+    Scroll_my_canvas.pack(side=TOP,fill=BOTH,expand=1)
+
+    #Add ScrollBar to Canvas
+    my_scrollbar_h = ttk.Scrollbar(Scroll_main_01,orient=HORIZONTAL, command=Scroll_my_canvas.xview)
+    my_scrollbar_h.pack(side=BOTTOM, fill=X)
+
+    #Configure Canvas
+    Scroll_my_canvas.configure(xscrollcommand=my_scrollbar_h.set)
+    Scroll_my_canvas.bind('<Configure>',lambda e: Scroll_my_canvas.configure(scrollregion = Scroll_my_canvas.bbox("all")))
+
+
+    #Create Another Frame INSIDE Canvas
+    top = Frame(Scroll_my_canvas)
+
+    #Add New Frame to Window In Canvas
+    Scroll_my_canvas.create_window((0,0), window=top, anchor='nw')
+    
+    
+    
+    
+    
     
     top_pos_x = 0
     
-    Button(top,text="Close\nWindow",pady=20,bg="yellow", command=top.destroy
+    Button(top,text="Close\nWindow",pady=20,bg="yellow", command=super_top.destroy
            ).grid(row = 0, column = top_pos_x)
     top_pos_x = top_pos_x+1
     

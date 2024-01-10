@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<CtAllInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SampleInfo>
+    <Id>2396</Id>
+    <SampleId>1</SampleId>
+    <SampleName1>Sample</SampleName1>
+    <SampleName2 />
+    <SampleName3 />
+    <BirthDate>2023-11-14T00:00:00</BirthDate>
+    <Sex>Female</Sex>
+    <Weight>0</Weight>
+    <SampleComment />
+    <SampleCreateDate>2023-11-14T09:36:57.962</SampleCreateDate>
+    <SampleUpdatedDate>2023-11-14T09:36:57.899</SampleUpdatedDate>
+  </SampleInfo>
+  <StudyInfo>
+    <Id>1</Id>
+    <Study>20231114</Study>
+    <StudyComment />
+    <StudyCreateDate>2023-11-14T09:37:41.33</StudyCreateDate>
+    <StudyUpdatedDate>2023-11-14T09:37:41.314</StudyUpdatedDate>
+    <SampleId>1</SampleId>
+  </StudyInfo>
+  <SeriesInfo>
+    <Id>3</Id>
+    <Series>104928</Series>
+    <VolumeFileName>CT_20231114_104928.VOX</VolumeFileName>
+    <SeriesComment>With ring reduction.</SeriesComment>
+    <SeriesCreateDate>2023-11-14T10:49:28.642</SeriesCreateDate>
+    <SeriesUpdatedDate>2023-11-14T10:49:28.642</SeriesUpdatedDate>
+    <KV>90</KV>
+    <UA>88</UA>
+    <FOV>36</FOV>
+    <VoxelSize>72</VoxelSize>
+    <ScanMode>Standard</ScanMode>
+    <ScanTime>18sec</ScanTime>
+    <Filter3D>1</Filter3D>
+    <StudyId>1</StudyId>
+    <BodyPosition>6</BodyPosition>
+    <ContrastAgent>-</ContrastAgent>
+    <EquipmentType>-1</EquipmentType>
+    <XrayFilter>Cu 0.06+Al 0.5</XrayFilter>
+  </SeriesInfo>
+</CtAllInfo>

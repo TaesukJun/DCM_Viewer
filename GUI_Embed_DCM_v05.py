@@ -261,7 +261,7 @@ def Clicked_Analyze():
     global FileDir, SelectData, OtherwayData
     global find
     global PeakVariance, setsigma
-      
+    global e_101, e_102
     
     
     super_top = Toplevel()
@@ -579,8 +579,8 @@ def Clicked_Analyze():
     rough_peak_positions = roughfitq[0:MaxNumPeaksUse]
 
 
-    PeakVariance = 0.1
-    setsigma = 0.01
+    PeakVariance = float(e_101.get())
+    setsigma = float(e_102.get())
 
     for i, cen in enumerate(rough_peak_positions):
         peak, pars = add_peak1('lz%d_' % (i+1), cen)
@@ -795,7 +795,7 @@ e_03.insert(0,r"C:\JunDrive\Mouse_data\Histogram_Plot_data")
 
 
 
-#####################################################################
+################### Section 2 / Parameters ##################################################
 #####################################################################
 
 
@@ -812,6 +812,23 @@ for text, mod in OnOff_MODES:
                 ).grid(row=n, column=4)
     n = n + 1
 
+Label(frame_12, text = "Fit Parameter",bg = "#90EE90").grid(row=3,column=4)
+
+Label(frame_12, text = "Variance" ).grid(row=4,column=4)
+
+e_101 = Entry(frame_12, width = 6, borderwidth = 3,
+             bg = "#10EE90"
+             )
+e_101.grid(row=5,column=4)
+e_101.insert(0,"0.05")
+
+Label(frame_12, text = "Sigma").grid(row=6,column=4)
+
+e_102 = Entry(frame_12, width = 6, borderwidth = 3,
+             bg = "#10EE90"
+             )
+e_102.grid(row=7,column=4)
+e_102.insert(0,"0.1")
 
 
 Label(frame_12, text = "Intensity Filter (Higher Num in red)"
@@ -886,6 +903,10 @@ e_19 = Entry(frame_12, width = 4, borderwidth = 3,
       )
 e_19.grid(row=7,column=3)
 e_19.insert(0,"15")
+
+
+
+
 
 
 #####################################################################

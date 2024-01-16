@@ -349,18 +349,26 @@ plt.show()
 
 MaxNumPeaksUse = 3
 
-model = LinearModel(prefix='bkg_')
-params = model.make_params(a=0, b=0)
+#model = LinearModel(prefix='bkg_')
+#params = model.make_params(a=0, b=0)
+
+if len(roughfitq)==2:
+    roughfitq.inser(1,roughfitq[2]*0.95)
     
 rough_peak_positions = roughfitq[0:MaxNumPeaksUse]
 
+PeakVariance = 0.4
+setsigma = 0.5
 
-PeakVariance = 0.1
-setsigma = 0.3
-
+k = 0;
 for i, cen in enumerate(rough_peak_positions):
     peak, pars = add_peak1('lz%d_' % (i+1), cen)
-    model = model + peak
+    if k == 0:
+        model = peak
+        params = model.make_params(a=0,b=0)
+    else:
+        model = model + peak
+    k = k + 1
     params.update(pars)
 
 init = model.eval(params, x=x)

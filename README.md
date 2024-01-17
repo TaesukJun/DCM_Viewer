@@ -2,13 +2,15 @@
 This is the DCM file viewer made by python tools <img src="https://img.shields.io/badge/Jun%20-%20%23a569bd%20" />
 <img src="https://capsule-render.vercel.app/api?type=waving&color=BDBDC8&height=150&section=footer" />
 
-<img src="https://img.shields.io/badge/Requirement-FFFFFF?style=plastic&logo=CakePHP&logoColor=CD92CD"/>
--Python<br/>
--Python modules:
+<img src="https://img.shields.io/badge/Requirement-FFFFFF?style=plastic&logo=CakePHP&logoColor=CD92CD" height="30"/>
+- Python<br/>
+- Python modules: -numpy -pandas -fnmatch -torch - torchvision.io -sklearn.model_selection -pydicom -matplotlib -skimage -scipy -lmfit </br>
+
+
 
 <br/><span>
   <a href="https://www.naver.com">
-<img src="https://img.shields.io/badge/Explanation-FFFFFF?style=plastic&logo=CakePHP&logoColor=CD92CD"/><br/>
+<img src="https://img.shields.io/badge/Explanation-FFFFFF?style=plastic&logo=CakePHP&logoColor=CD92CD" height="30"/><br/>
  </a>
 </span>
 The DCM_viewer analyzes the intensity of the images of DCM images with your preferred setting 

@@ -53,9 +53,17 @@ def find(pattern, path):
 
 
 def add_peak1(prefix, center, amplitude=0.002, sigma=0.0075):
-    peak = GaussianModel(prefix=prefix)
+    peak = LorentzianModel(prefix=prefix)
     pars = peak.make_params()
     pars[prefix + 'center'].set(center, max=center*(1+PeakVariance), min=center*(1-PeakVariance))
+    pars[prefix + 'amplitude'].set(amplitude, min=0)
+    pars[prefix + 'sigma'].set(sigma, max=setsigma, min=0)
+    return peak, pars
+
+def add_peak2(prefix, center, amplitude=0.002, sigma=0.0075):
+    peak = LorentzianModel(prefix=prefix)
+    pars = peak.make_params()
+    pars[prefix + 'center'].set(center, max=center*(1+PeakVariance*1.55), min=center*(1-PeakVariance*1.55))
     pars[prefix + 'amplitude'].set(amplitude, min=0)
     pars[prefix + 'sigma'].set(sigma, max=setsigma, min=0)
     return peak, pars
@@ -66,7 +74,7 @@ def add_peak1(prefix, center, amplitude=0.002, sigma=0.0075):
 ############################################################
 
 
-FileDir = r"C:\Users\taesu\OneDrive - purdue.edu\Tjun_231114_PEG_additive\PEG_additive\CT_20231114_104928\Sample_1_20231114_104928"
+FileDir = r"C:\Users\taesu\OneDrive - purdue.edu\Tjun_231114_peg_2\CT_20231114_172608\15_15_20231114_172608"
 FileDir = FileDir.replace(os.sep,"/")
 FileDir = FileDir + "/"
 FileDir = FileDir.replace('\\','/')
@@ -351,25 +359,41 @@ MaxNumPeaksUse = 3
 
 #model = LinearModel(prefix='bkg_')
 #params = model.make_params(a=0, b=0)
-
+presoaked = 0
 if len(roughfitq)==2:
-    roughfitq.inser(1,roughfitq[2]*0.95)
+    roughfitq = np.insert(roughfitq,1,roughfitq[1]*0.915)
+    peaksoaked = 1
     
 rough_peak_positions = roughfitq[0:MaxNumPeaksUse]
 
-PeakVariance = 0.4
+PeakVariance = 0.05
 setsigma = 0.5
 
 k = 0;
-for i, cen in enumerate(rough_peak_positions):
-    peak, pars = add_peak1('lz%d_' % (i+1), cen)
-    if k == 0:
-        model = peak
-        params = model.make_params(a=0,b=0)
-    else:
-        model = model + peak
-    k = k + 1
-    params.update(pars)
+
+if peaksoaked == 1:
+    for i, cen in enumerate(rough_peak_positions):
+        if k == 1:
+            peak, pars = add_peak2('lz%d_' % (i+1), cen)
+        else:
+            peak, pars = add_peak1('lz%d_' % (i+1), cen)
+        if k == 0:
+            model = peak
+            params = model.make_params(a=0,b=0)
+        else:
+            model = model + peak
+        k = k + 1
+        params.update(pars)
+else:
+    for i, cen in enumerate(rough_peak_positions):
+        peak, pars = add_peak1('lz%d_' % (i+1), cen)
+        if k == 0:
+            model = peak
+            params = model.make_params(a=0,b=0)
+        else:
+            model = model + peak
+        k = k + 1
+        params.update(pars)
 
 init = model.eval(params, x=x)
 result = model.fit(y, params, x=x)
@@ -415,7 +439,16 @@ for name, par in result.params.items():
             print("  %s: value = %f" % (name, par.value))
             amp = np.append(amp, par.value)
             n = n + 1
-        
+            
+    if 'center' in name:
+        if n == 1:
+            amp = par.value
+            print("  %s: value = %f" % (name, par.value))
+            n = n + 1
+        else:
+            print("  %s: value = %f" % (name, par.value))
+            amp = np.append(amp, par.value)
+            n = n + 1
         
         
         

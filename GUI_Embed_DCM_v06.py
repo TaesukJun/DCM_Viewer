@@ -405,7 +405,7 @@ def Clicked_Analyze():
 
         ##################################################################
         
-        img_array_selection = img_array[ImgFocusH[0]:ImgFocusH[1], 140:365]
+        img_array_selection = img_array[ImgFocusH[0]:ImgFocusH[1], ImgFocusW[0]:ImgFocusW[1]]
 
         if ImageResultShow == 'On':
             Label(top, text = "%02d" %(FileIndex)).grid(row=0,column=top_pos_x)
